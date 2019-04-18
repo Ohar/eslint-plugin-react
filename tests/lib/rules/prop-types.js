@@ -1805,6 +1805,20 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
+      settings: {react: {flowVersion: '0.52'}},
+      parser: 'babel-eslint'
+    }, {
+      code: `
+        type Props = {
+          foo: string,
+        };
+
+        class Bar extends React.Component<Props> {
+          render() {
+            return <div>{this.props.foo}</div>
+          }
+        }
+      `,
       settings: {react: {flowVersion: '0.53'}},
       parser: 'babel-eslint'
     }, {
@@ -2303,6 +2317,19 @@ ruleTester.run('prop-types', rule, {
         const b = a::fn1();
       `,
       parser: 'babel-eslint'
+    },
+    {
+      // issue #1259
+      code: `
+        const Hello = props => {
+          const { notInProp } = dict[props.foo];
+          return <div />
+        }
+
+        Hello.propTypes = {
+          foo: PropTypes.number,
+        }
+      `
     }
   ],
 
